@@ -1,14 +1,17 @@
 package FirstProject.demo.Entity;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
-
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
-import javax.swing.text.html.Option;
+
 
 @RestController
 public class PersonController {
@@ -18,14 +21,22 @@ public class PersonController {
     PersonRepository personRepository;
 
 
-
     @PostMapping("Create")
-    public ResponseEntity<String>personResponseEntity(@RequestBody Person person){
-        if (personRepository.existsByName(person.getName())) {
+    public ResponseEntity<?> personResponseEntity(@Valid @RequestBody Person person, BindingResult result) {
+        Optional<Person> person1 = personRepository.findByName(person.getName());
+        if (person1.isPresent()) {
             throw new PersonNotFoundException("Personi me këtë emër ekziston tashmë: " + person.getName());
-        }
-        personRepository.save(person);
-        return new ResponseEntity<>(person.getName(),HttpStatus.ACCEPTED);
+        } else if (result.hasErrors()) {
+            StringBuilder errors = new StringBuilder("Gabim në validim: ");
+
+            result.getFieldErrors().forEach(error -> {
+                errors.append(error.getField()).append(" - ").append(error.getDefaultMessage()).append("; ");
+            });
+            return new ResponseEntity<>(errors.toString(), HttpStatus.BAD_REQUEST);
+        } else
+            personRepository.save(person);
+        return new ResponseEntity<>(person.getName(), HttpStatus.ACCEPTED);
+
     }
 
     @GetMapping("/{id}")
@@ -38,10 +49,29 @@ public class PersonController {
 
     }
 
+    @DeleteMapping("del/{id}")
+    public void del(@PathVariable Integer id) {
+        personRepository.deleteById(id);
+    }
+
+    @PostMapping("update/{id}")
+    public ResponseEntity<String> pUpdate(@PathVariable Integer id, @RequestBody Person person) {
+        Optional<Person> existingPerson = personRepository.findById(id);
+        if (existingPerson.isPresent()) {
+
+            Person person1 = existingPerson.get();
+            person1.setName(person.getName());
+            personRepository.save(person1);
+            return new ResponseEntity<>(person.getName(), HttpStatus.OK);
+        } else {
+            throw new PersonNotFoundException("ID NOT FOUND : " + id);
+        }
+    }
+
 
     @GetMapping("getAll")
-    public List<Person>personList(){
-        List<Person>personList=personRepository.findAll();
+    public List<Person> personList() {
+        List<Person> personList = personRepository.findAll();
         System.out.println(personList);
 
         return personList;
