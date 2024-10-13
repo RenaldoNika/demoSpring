@@ -1,9 +1,6 @@
 package FirstProject.demo.Entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -20,6 +17,8 @@ public class Person {
     @Min(value = 18, message = "Mosha duhet të jetë të paktën 18 vjeç")
     private int age;
 
+    @Lob
+    private byte[] image;
 
     @Email
     @NotNull(message = "Fill the email")
@@ -43,6 +42,14 @@ public class Person {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
     }
 
     public String getName() {

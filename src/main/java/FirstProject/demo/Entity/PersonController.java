@@ -4,20 +4,43 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.multipart.MultipartFile;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
 
-@RestController
+@Controller
 public class PersonController {
 
 
     @Autowired
     PersonRepository personRepository;
 
+    @GetMapping("im")
+    public String im(){
+        return "html";
+    }
+
+    @PostMapping("/uploadImage")
+    public String handleImageUpload(@RequestParam("image") MultipartFile image) {
+        try {
+            if (!image.getContentType().startsWith("image/")) {
+                return "Ju lutem ngarkoni një fotografi!";
+            }
+            byte[] imageBytes = image.getBytes();
+            Person person = new Person();
+            person.setImage(imageBytes);
+            personRepository.save(person);
+            return "Fotografia u ngarkua me sukses!";
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "Ngarkimi dështoi!";
+        }
+    }
 
     @PostMapping("Create")
     public ResponseEntity<?> personResponseEntity(@Valid @RequestBody Person person, BindingResult result) {
@@ -77,7 +100,6 @@ public class PersonController {
             throw new PersonNotFoundException("ID NOT FOUND : " + id);
         }
     }
-
 
     @GetMapping("getAll")
     public List<Person> personList() {
