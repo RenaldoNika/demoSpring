@@ -48,6 +48,17 @@ public class PersonController {
 
     }
 
+
+    @GetMapping("/name/{name}")
+    public ResponseEntity<Person> name(@PathVariable String name) {
+        Optional<Person> person = personRepository.findByName(name);
+        if (person.isPresent()) {
+            Person personFind=person.get();
+            return ResponseEntity.ok(personFind);
+        }
+        throw new PersonNotFoundException("PERSONI ME EMER " + name + " nuk egziston");
+    }
+
     @DeleteMapping("del/{id}")
     public void del(@PathVariable Integer id) {
         personRepository.deleteById(id);
