@@ -17,8 +17,6 @@ public class Person {
     @Min(value = 18, message = "Mosha duhet të jetë të paktën 18 vjeç")
     private int age;
 
-    @Lob
-    private byte[] image;
 
     @Email
     @NotNull(message = "Fill the email")
@@ -42,14 +40,6 @@ public class Person {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public byte[] getImage() {
-        return image;
-    }
-
-    public void setImage(byte[] image) {
-        this.image = image;
     }
 
     public String getName() {

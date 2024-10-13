@@ -12,34 +12,15 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
-
 @Controller
 public class PersonController {
-
 
     @Autowired
     PersonRepository personRepository;
 
-    @GetMapping("im")
+    @GetMapping("/im")
     public String im(){
         return "html";
-    }
-
-    @PostMapping("/uploadImage")
-    public String handleImageUpload(@RequestParam("image") MultipartFile image) {
-        try {
-            if (!image.getContentType().startsWith("image/")) {
-                return "Ju lutem ngarkoni një fotografi!";
-            }
-            byte[] imageBytes = image.getBytes();
-            Person person = new Person();
-            person.setImage(imageBytes);
-            personRepository.save(person);
-            return "Fotografia u ngarkua me sukses!";
-        } catch (IOException e) {
-            e.printStackTrace();
-            return "Ngarkimi dështoi!";
-        }
     }
 
     @PostMapping("Create")
@@ -87,19 +68,6 @@ public class PersonController {
         personRepository.deleteById(id);
     }
 
-    @PostMapping("update/{id}")
-    public ResponseEntity<String> pUpdate(@PathVariable Integer id, @RequestBody Person person) {
-        Optional<Person> existingPerson = personRepository.findById(id);
-        if (existingPerson.isPresent()) {
-
-            Person person1 = existingPerson.get();
-            person1.setName(person.getName());
-            personRepository.save(person1);
-            return new ResponseEntity<>(person.getName(), HttpStatus.OK);
-        } else {
-            throw new PersonNotFoundException("ID NOT FOUND : " + id);
-        }
-    }
 
     @GetMapping("getAll")
     public List<Person> personList() {
