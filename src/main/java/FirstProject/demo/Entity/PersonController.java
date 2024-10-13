@@ -5,11 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
-import java.util.HashMap;
+
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 
@@ -27,10 +25,11 @@ public class PersonController {
         if (person1.isPresent()) {
             throw new PersonNotFoundException("Personi me këtë emër ekziston tashmë: " + person.getName());
         } else if (result.hasErrors()) {
+
             StringBuilder errors = new StringBuilder("Gabim në validim: ");
 
             result.getFieldErrors().forEach(error -> {
-                errors.append(error.getField()).append(" - ").append(error.getDefaultMessage()).append("; ");
+                errors.append(error.getField()).append("  -  ").append(error.getDefaultMessage()).append(" - ");
             });
             return new ResponseEntity<>(errors.toString(), HttpStatus.BAD_REQUEST);
         } else
@@ -76,4 +75,5 @@ public class PersonController {
 
         return personList;
     }
+
 }
