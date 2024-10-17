@@ -7,12 +7,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
-@Controller
+@RestController
 public class PersonController {
 
     @Autowired
@@ -29,9 +27,7 @@ public class PersonController {
         if (person1.isPresent()) {
             throw new PersonNotFoundException("Personi me këtë emër ekziston tashmë: " + person.getName());
         } else if (result.hasErrors()) {
-
             StringBuilder errors = new StringBuilder("Gabim në validim: ");
-
             result.getFieldErrors().forEach(error -> {
                 errors.append(error.getField()).append("  -  ").append(error.getDefaultMessage()).append(" - ");
             });
