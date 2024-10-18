@@ -2,6 +2,7 @@ package FirstProject.demo.Entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 public class Person {
@@ -15,7 +16,7 @@ public class Person {
     @Min(value = 18, message = "Mosha duhet të jetë të paktën 18 vjeç")
     private int age;
 
-    @Column(nullable = true)
+    @NotNull(message = "mbush email o zoteri")
     private String email;
 
     public int getId() {

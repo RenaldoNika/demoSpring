@@ -39,13 +39,10 @@ public class PersonController {
     @PostMapping("/Create")
     public ResponseEntity<?> personResponseEntity(@Valid @RequestBody Person person) {
         Optional<Person> person1 = personRepository.findByName(person.getName());
-        // Kontrollo nëse personi me këtë emër ekziston tashmë
         if (person1.isPresent()) {
             throw new PersonNotFoundException("Personi me këtë emër ekziston tashmë: " + person.getName());
         }
-        // Nëse nuk ka gabime validimi dhe personi nuk ekziston, ruaj personin
         personRepository.save(person);
-        // Kthe një përgjigje të suksesshme
         return new ResponseEntity<>(person.getName(), HttpStatus.ACCEPTED);
     }
 
