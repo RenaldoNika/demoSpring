@@ -15,7 +15,7 @@ public class Person {
     @Min(value = 18, message = "Mosha duhet të jetë të paktën 18 vjeç")
     private int age;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String email;
 
     public int getId() {

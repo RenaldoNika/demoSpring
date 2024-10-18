@@ -20,21 +20,33 @@ public class PersonController {
         return "html";
     }
 
-    @PostMapping("Create")
-    public ResponseEntity<?> personResponseEntity(@Valid @RequestBody Person person, BindingResult result) {
+//    @PostMapping("Create")
+//    public ResponseEntity<?> personResponseEntity(@Valid @RequestBody Person person, BindingResult result) {
+//        Optional<Person> person1 = personRepository.findByName(person.getName());
+//        if (person1.isPresent()) {
+//            throw new PersonNotFoundException("Personi me këtë emër ekziston tashmë: " + person.getName());
+//        } else if (result.hasErrors()) {
+//            StringBuilder errors = new StringBuilder("Gabim në validim: ");
+//            result.getFieldErrors().forEach(error -> {
+//                errors.append(error.getField()).append("  -  ").append(error.getDefaultMessage()).append(" - ");
+//            });
+//            return new ResponseEntity<>(errors.toString(), HttpStatus.BAD_REQUEST);
+//        } else
+//            personRepository.save(person);
+//        return new ResponseEntity<>(person.getName(), HttpStatus.ACCEPTED);
+//    }
+
+    @PostMapping("/Create")
+    public ResponseEntity<?> personResponseEntity(@Valid @RequestBody Person person) {
         Optional<Person> person1 = personRepository.findByName(person.getName());
+        // Kontrollo nëse personi me këtë emër ekziston tashmë
         if (person1.isPresent()) {
             throw new PersonNotFoundException("Personi me këtë emër ekziston tashmë: " + person.getName());
-        } else if (result.hasErrors()) {
-            StringBuilder errors = new StringBuilder("Gabim në validim: ");
-            result.getFieldErrors().forEach(error -> {
-                errors.append(error.getField()).append("  -  ").append(error.getDefaultMessage()).append(" - ");
-            });
-            return new ResponseEntity<>(errors.toString(), HttpStatus.BAD_REQUEST);
-        } else
-            personRepository.save(person);
+        }
+        // Nëse nuk ka gabime validimi dhe personi nuk ekziston, ruaj personin
+        personRepository.save(person);
+        // Kthe një përgjigje të suksesshme
         return new ResponseEntity<>(person.getName(), HttpStatus.ACCEPTED);
-
     }
 
     @GetMapping("/{id}")
@@ -44,9 +56,7 @@ public class PersonController {
             return new ResponseEntity<>(product, HttpStatus.OK);
         }
         throw new PersonNotFoundException("Product with id " + id + " not found");
-
     }
-
 
     @GetMapping("/name/{name}")
     public ResponseEntity<Person> name(@PathVariable String name) {
