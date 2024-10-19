@@ -14,7 +14,7 @@ public class GlobalExceptionHandler{
 
     @ExceptionHandler(PersonNotFoundException.class)
     public ResponseEntity<String> handleProductNotFoundException(PersonNotFoundException ex) {
-        return new ResponseEntity<>("Person not found: " + ex.getMessage(), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 
 
@@ -23,9 +23,8 @@ public class GlobalExceptionHandler{
     public ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();
         ex.getBindingResult().getFieldErrors().forEach(error ->
-                errors.put(error.getField(), error.getDefaultMessage())
-        );
-        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+                errors.put(error.getField(), error.getDefaultMessage()));
+        return new ResponseEntity<>(errors, HttpStatus.NOT_FOUND);
     }
 
 }

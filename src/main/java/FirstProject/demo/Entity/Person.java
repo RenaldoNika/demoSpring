@@ -19,6 +19,7 @@ public class Person {
     @NotNull(message = "mbush email o zoteri")
     private String email;
 
+
     public int getId() {
         return id;
     }

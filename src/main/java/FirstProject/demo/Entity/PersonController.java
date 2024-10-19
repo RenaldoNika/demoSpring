@@ -36,14 +36,21 @@ public class PersonController {
 //        return new ResponseEntity<>(person.getName(), HttpStatus.ACCEPTED);
 //    }
 
+    @DeleteMapping("/products/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteProduct(@PathVariable Integer id) {
+        personRepository.deleteById(id);
+    }
+
     @PostMapping("/Create")
-    public ResponseEntity<?> personResponseEntity(@Valid @RequestBody Person person) {
-        Optional<Person> person1 = personRepository.findByName(person.getName());
-        if (person1.isPresent()) {
+    @ResponseStatus(HttpStatus.OK)
+    public Person createPerson(@Valid @RequestBody Person person) {
+        Optional<Person> existingPerson = personRepository.findByName(person.getName());
+        if (existingPerson.isPresent()) {
             throw new PersonNotFoundException("Personi me këtë emër ekziston tashmë: " + person.getName());
         }
-        personRepository.save(person);
-        return new ResponseEntity<>(person.getName(), HttpStatus.ACCEPTED);
+        Person savedPerson = personRepository.save(person);
+        return savedPerson;
     }
 
     @GetMapping("/{id}")
@@ -66,7 +73,11 @@ public class PersonController {
     }
 
     @DeleteMapping("del/{id}")
+    @ResponseStatus(HttpStatus.ACCEPTED)
     public void del(@PathVariable Integer id) {
+        if(!personRepository.existsById(id)){
+            throw new PersonNotFoundException();
+        }
         personRepository.deleteById(id);
     }
 
