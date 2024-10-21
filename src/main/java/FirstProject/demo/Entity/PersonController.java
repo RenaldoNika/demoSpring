@@ -4,7 +4,6 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
@@ -16,7 +15,7 @@ public class PersonController {
     PersonRepository personRepository;
 
     @GetMapping("/im")
-    public String im(){
+    public String im() {
         return "html";
     }
 
@@ -66,21 +65,20 @@ public class PersonController {
     public ResponseEntity<Person> name(@PathVariable String name) {
         Optional<Person> person = personRepository.findByName(name);
         if (person.isPresent()) {
-            Person personFind=person.get();
+            Person personFind = person.get();
             return ResponseEntity.ok(personFind);
         }
         throw new PersonNotFoundException("PERSONI ME EMER " + name + " nuk egziston");
     }
 
     @DeleteMapping("del/{id}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
+    @ResponseStatus(HttpStatus.CONTINUE)
     public void del(@PathVariable Integer id) {
-        if(!personRepository.existsById(id)){
+        if (!personRepository.existsById(id)) {
             throw new PersonNotFoundException();
         }
         personRepository.deleteById(id);
     }
-
 
     @GetMapping("getAll")
     public List<Person> personList() {

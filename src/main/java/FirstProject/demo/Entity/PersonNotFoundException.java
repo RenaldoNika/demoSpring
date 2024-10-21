@@ -10,6 +10,6 @@ public class PersonNotFoundException extends RuntimeException{
     }
 
     public PersonNotFoundException() {
-        super("Person not found.");
+        super("Person not found");
     }
 }

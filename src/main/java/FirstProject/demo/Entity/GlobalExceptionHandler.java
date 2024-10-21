@@ -11,12 +11,10 @@ import java.util.Map;
 @ControllerAdvice
 public class GlobalExceptionHandler{
 
-
     @ExceptionHandler(PersonNotFoundException.class)
     public ResponseEntity<String> handleProductNotFoundException(PersonNotFoundException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
-
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
