@@ -3,6 +3,7 @@ package FirstProject.demo.Entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import java.util.Objects;
 
 @Entity
 public class Person {
@@ -64,7 +65,23 @@ public class Person {
                 "AGE: "+age+
                 '}';
     }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Person person = (Person) o;
+        return age == person.age && Objects.equals(name, person.name);
+    }
+    public int hashCode() {
+        return Objects.hash(name, age);
+    }
 
-
+    public static void main(String[] args) {
+        Person person=new Person();
+        person.setName("Renaldo");
+        Person person1=new Person();
+        person1.setName("RENO");
+        System.out.println(person1.equals(person));
+    }
 
 }
