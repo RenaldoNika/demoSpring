@@ -77,11 +77,23 @@ public class Person {
     }
 
     public static void main(String[] args) {
+
         Person person=new Person();
-        person.setName("Renaldo");
-        Person person1=new Person();
-        person1.setName("RENO");
-        System.out.println(person1.equals(person));
+//        person.setEmail("reno");
+
+        System.out.println(person.hashCode());
+
+//        String s1 = new String("Hello");
+//        String s2 = new String("Hello");
+//        String s3 = s2;
+//        if (s1.equals(s2)) {
+//            System.out.println("Përmbajtja është e njëjtë.");
+//        }
+//        if (s3 == s2) {
+//            System.out.println("Referencat janë të njëjta.");
+//        } else {
+//            System.out.println("Referencat janë të ndryshme.");
+//        }
     }
 
 }
